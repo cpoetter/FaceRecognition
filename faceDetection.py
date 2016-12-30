@@ -3,6 +3,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 import cv2
+import os
  
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
@@ -15,6 +16,9 @@ time.sleep(0.1)
 
 # cascade is just an XML file that contains the data to detect faces
 faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+# welcome new entered person
+previous_faces = 0
 
 # capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
@@ -31,6 +35,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         minSize=(30, 30),
         flags=cv2.cv.CV_HAAR_SCALE_IMAGE
     )
+
+    if len(faces) > previous_faces:
+       print 'welcome'
+       os.system("./speech.sh 'Welcome'")
+    previous_faces = len(faces)
 
     # Draw a rectangle around the faces
     for (x, y, w, h) in faces:
