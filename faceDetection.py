@@ -4,6 +4,7 @@ from picamera import PiCamera
 import time
 import cv2
 import os
+from PIL import Image
  
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
@@ -37,8 +38,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     )
 
     if len(faces) > previous_faces:
-       print 'welcome'
-       os.system("./speech.sh 'Welcome'")
+       welcome_text = 'Willkommen bei Elgato!'
+       print welcome_text
+       os.system("./speech.sh " + welcome_text + " &")
+       im = Image.fromarray(image)
+       timestamp = str(int(time.time()))
+       im.save("training/face_" + timestamp + ".jpg")
     previous_faces = len(faces)
 
     # Draw a rectangle around the faces
@@ -46,7 +51,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
     # Display the resulting frame
-    cv2.imshow('Video', image)
+    #cv2.imshow('Video', image)
     key = cv2.waitKey(1) & 0xFF
 
     # clear the stream in preparation for the next frame
