@@ -10,8 +10,8 @@ This is a little Raspberry Pi projects thats detects people with the help of the
 - OpenCV
 
 ## Installation
-'''
+```
 sudo apt-get update
 sudo raspi-config
 sudo apt-get install vim python-opencv mplayer
-'''
+```
