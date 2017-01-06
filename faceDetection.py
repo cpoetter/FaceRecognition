@@ -31,7 +31,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     faces = faceCascade.detectMultiScale(
         gray,
-        scaleFactor=1.5,
+        scaleFactor=1.77777775,
         minNeighbors=5,
         minSize=(30, 30),
         flags=cv2.cv.CV_HAAR_SCALE_IMAGE
@@ -40,10 +40,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     if len(faces) > previous_faces:
        welcome_text = 'Willkommen bei Elgato!'
        print welcome_text
-       os.system("./speech.sh " + welcome_text + " &")
-       im = Image.fromarray(image)
+       # os.system("./speech.sh " + welcome_text + " &")
        timestamp = str(int(time.time()))
-       im.save("training/face_" + timestamp + ".jpg")
+       cv2.imwrite("training/face_" + timestamp + ".jpg",image)
     previous_faces = len(faces)
 
     # Draw a rectangle around the faces
@@ -51,7 +50,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
     # Display the resulting frame
-    #cv2.imshow('Video', image)
+    cv2.imshow('Video', image)
     key = cv2.waitKey(1) & 0xFF
 
     # clear the stream in preparation for the next frame
